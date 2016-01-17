@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Animal Health Book</string>
+    <string name="content_authority">com.skoczo.animalhealthbook</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="animal_name">Name:</string>
+    <string name="save">Save</string>
+    <string name="born_date">Born date:</string>
+    <string name="pick_time">Pick date</string>
+    <string name="add_animal">Add animal</string>
+    <string name="no_name_error">Animal name cannot be empty</string>
+    <string name="no_born_date_error">Please pick born date</string>
+    <string name="weight">Weight:</string>
+    <string name="no_name_weight">Weight cannot be empty</string>
+</resources>

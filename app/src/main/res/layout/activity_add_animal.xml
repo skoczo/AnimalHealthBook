@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alignmentMode="alignBounds"
+    android:columnCount="2"
+    android:columnOrderPreserved="false"
+    android:useDefaultMargins="true"
+    tools:context="com.skoczo.animalhealthbook.AddAnimal">
+
+    <TextView
+        android:layout_columnSpan="2"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/add_animal"
+        android:textSize="32dip" />
+
+    <TextView
+        android:layout_gravity="right"
+        android:text="@string/animal_name" />
+
+    <EditText android:id="@+id/animal_name"
+        android:ems="10" />
+
+    <TextView
+        android:layout_column="0"
+        android:layout_gravity="right"
+        android:text="@string/born_date" />
+
+    <Button
+        android:id="@+id/born_date_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showTimePickerDialog"
+        android:text="@string/pick_time" />
+
+    <TextView
+        android:layout_column="0"
+        android:layout_gravity="right"
+        android:text="@string/weight"
+        android:id="@+id/WeightText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weight"
+        android:inputType="number"
+        android:layout_row="3"
+        android:layout_column="1"
+        android:ems="10"/>
+
+    <Space
+        android:layout_column="0"
+        android:layout_columnSpan="1"
+        android:layout_gravity="fill"
+        android:layout_row="4" />
+
+    <Button
+        android:id="@+id/animal_save"
+        android:layout_column="1"
+        android:layout_row="5"
+        android:text="@string/save" />
+</GridLayout>
