@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DbHelper extends SQLiteOpenHelper {
     private static String DB_NAME= "animalhealthbook.db";
-    private static int DB_VERSION = 1;
+    private static int DB_VERSION = 3;
 
     public DbHelper(Context context) {
         super(context,DB_NAME, null, DB_VERSION);
@@ -21,7 +21,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 + AnimalsProvider.AnimalEntry._ID + " INTEGER PRIMARY KEY, "
                 + AnimalsProvider.AnimalEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + AnimalsProvider.AnimalEntry.COLUMN_BIRTH + " INTEGER NOT NULL,"
-                + AnimalsProvider.AnimalEntry.COLUMN_WEIGHT + " INTEGER NOT NULL "
+                + AnimalsProvider.AnimalEntry.COLUMN_WEIGHT + " INTEGER NOT NULL, "
+                + AnimalsProvider.AnimalEntry.COLUMN_TYPE+ " INTEGER NOT NULL "
                 + ");";
 
         db.execSQL(ANIMALS_DB_CREATE);

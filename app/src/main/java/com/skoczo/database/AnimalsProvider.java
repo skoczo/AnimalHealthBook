@@ -39,6 +39,7 @@ public class AnimalsProvider {
         public static final String COLUMN_NAME = "NAME";
         public static final String COLUMN_BIRTH = "BIRTH";
         public static final String COLUMN_WEIGHT = "WEIGHT";
+        public static final String COLUMN_TYPE = "TYPE";
 
         public static Uri buildLocationUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

@@ -1,9 +1,9 @@
-package com.skoczo.animalhealthbook;
+package com.skoczo.animalhealthbook.main;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.skoczo.animalhealthbook.R;
 import com.skoczo.database.AnimalsProvider;
 import com.skoczo.database.DbHelper;
 import com.skoczo.helpers.UiHelpers;
@@ -57,6 +58,8 @@ public class MainActivityFragment extends Fragment {
         gridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 
         gridview.setMultiChoiceModeListener(new GridView.MultiChoiceModeListener() {
+            private String TAG = GridView.MultiChoiceModeListener.class.getName();
+
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;
@@ -94,10 +97,13 @@ public class MainActivityFragment extends Fragment {
                     SparseBooleanArray checked = gridview.getCheckedItemPositions();
                     String where = buildWhere(checked);
 
-                    int deleted = db.delete(AnimalsProvider.AnimalEntry.TABLE_NAME, where, null);
+                    if(where.length() == 0) {
+                        Log.e(TAG, "where statement empty");
+                    } else {
+                        int deleted = db.delete(AnimalsProvider.AnimalEntry.TABLE_NAME, where, null);
 
-                    UiHelpers.showToast(getActivity(), "" + deleted + " animals deleted", Toast.LENGTH_SHORT);
-
+                        UiHelpers.showToast(getActivity(), "" + deleted + " animals deleted", Toast.LENGTH_SHORT);
+                    }
                     adapter.loadAnimals();
 
                     mode.finish();
@@ -112,12 +118,17 @@ public class MainActivityFragment extends Fragment {
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < checked.size(); i++) {
-                    if (checked.get(i)) {
-                        sb.append(AnimalsProvider.AnimalEntry._ID + " = " + ImageAdapter.animals.get(i).id + " or ");
+                    if (checked.valueAt(i)) {
+
+                        sb.append(AnimalsProvider.AnimalEntry._ID + " = " + ImageAdapter.animals.get(checked.keyAt(i)).id + " or ");
                     }
                 }
 
-                sb.setLength(sb.length() - 4);
+                if (sb.length() > 4) {
+                    sb.setLength(sb.length() - 4);
+                } else {
+                    Log.e(TAG, "where is empty. Checked length:" + checked.size());
+                }
 
                 return sb.toString();
             }
@@ -125,14 +136,6 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position,
                                                   long id, boolean checked) {
-                if (checked) {
-                    gridview.getChildAt(position).setBackgroundColor(
-                            Color.parseColor("#6633b5e5"));
-                } else {
-                    gridview.getChildAt(position).setBackgroundColor(
-                            Color.parseColor("#00000000"));
-                }
-
                 int selectCount = gridview.getCheckedItemCount();
                 switch (selectCount) {
                     case 1:
@@ -142,6 +145,8 @@ public class MainActivityFragment extends Fragment {
                         mode.setSubtitle("" + selectCount + " items selected");
                         break;
                 }
+
+                gridview.deferNotifyDataSetChanged();
             }
         });
 
@@ -150,15 +155,6 @@ public class MainActivityFragment extends Fragment {
                                     int position, long id) {
                 Toast.makeText(getContext(), "" + position,
                         Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                view.setBackgroundColor(Color.parseColor("#6633b5e5"));
-
-                return true;
             }
         });
 

@@ -8,7 +8,7 @@
         android:layout_width="300px"
         android:layout_height="300px"
         android:id="@+id/imageView"
-        android:src="@drawable/cat"
+        android:src="@drawable/cat_silhouette"
         android:layout_gravity="center"
         android:scaleType="fitStart"
         android:layout_marginLeft="10dp"

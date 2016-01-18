@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook;
+package com.skoczo.animalhealthbook.main;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.skoczo.animalhealthbook.R;
 import com.skoczo.database.AnimalsProvider;
 import com.skoczo.database.DbHelper;
 
@@ -45,7 +46,7 @@ public class ImageAdapter extends BaseAdapter {
 
         animals = new ArrayList<AnimalData>();
 
-        if(weatherCursor.getCount() == 0) {
+        if (weatherCursor.getCount() == 0) {
             return;
         }
 
@@ -55,9 +56,12 @@ public class ImageAdapter extends BaseAdapter {
             AnimalData animal = new AnimalData();
             animal.name = weatherCursor.getString(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_NAME));
             animal.id = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry._ID));
+            animal.type = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_TYPE));
             animals.add(animal);
 
-        }while (weatherCursor.moveToNext());
+        } while (weatherCursor.moveToNext());
+
+        weatherCursor.close();
     }
 
     public int getCount() {
@@ -77,14 +81,31 @@ public class ImageAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.animal_main_layout, null);
+        CheckableView checkable = new CheckableView(mContext);
+        checkable.addView(view);
 
-        ImageView image = (ImageView)view.findViewById(R.id.imageView);
-//        image.setPadding(8, 8, 8, 8);
+        ImageView image = (ImageView) view.findViewById(R.id.imageView);
+        image.setPadding(8, 8, 8, 8);
+        switch (animals.get(position).type) {
+            case 0:
+                image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_silhouette));
+                break;
+            case 1:
+                image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.dog_silhouette));
+                break;
+            case 2:
+                image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cow_silhouette));
+                break;
+            case 3:
+                image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.horse_silhouette));
+                break;
+        };
+//        image.setImageResource(R.drawable.cat_silhouette);
 
-        ((TextView)view.findViewById(R.id.mainAnimalName)).setText(animals.get(position).name);
-        ((TextView)view.findViewById(R.id.db_id)).setText(animals.get(position).id.toString());
+        ((TextView) view.findViewById(R.id.mainAnimalName)).setText(animals.get(position).name);
+        ((TextView) view.findViewById(R.id.db_id)).setText(animals.get(position).id.toString());
 
-        return view;
+        return checkable;
 
     }
 }
@@ -92,4 +113,5 @@ public class ImageAdapter extends BaseAdapter {
 class AnimalData {
     public String name;
     public Integer id;
+    public Integer type;
 }

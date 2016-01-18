@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook;
+package com.skoczo.animalhealthbook.add;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -8,7 +8,9 @@ import android.widget.DatePicker;
 
 import java.util.Calendar;
 
-import static java.util.Calendar.*;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 
 /**
  * Created by skoczo on 13.01.16.

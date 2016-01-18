@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook;
+package com.skoczo.animalhealthbook.add;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -7,22 +7,30 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.skoczo.animalhealthbook.R;
 import com.skoczo.database.AnimalsProvider;
 import com.skoczo.database.DbHelper;
 import com.skoczo.helpers.UiHelpers;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddAnimal extends AppCompatActivity{
 
     private Calendar bornDate = Calendar.getInstance();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private DatePickerFragment newFragment;
+    private Integer type = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,45 @@ public class AddAnimal extends AppCompatActivity{
         setContentView(R.layout.activity_add_animal);
 
         final Activity actual = this;
+
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        final List<String> types = Arrays.asList(getResources().getStringArray(R.array.types));
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter <String>(this, android.R.layout.simple_spinner_item, types);
+
+        final ImageView image = (ImageView)findViewById(R.id.add_animal_image);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                type = position;
+
+                switch (position) {
+                    case 0:
+                        image.setImageDrawable(getResources().getDrawable(R.drawable.cat_silhouette));
+                        break;
+                    case 1:
+                        image.setImageDrawable(getResources().getDrawable(R.drawable.dog_silhouette));
+                        break;
+                    case 2:
+                        image.setImageDrawable(getResources().getDrawable(R.drawable.cow_silhouette));
+                        break;
+                    case 3:
+                        image.setImageDrawable(getResources().getDrawable(R.drawable.horse_silhouette));
+                        break;
+                };
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
         Button save = (Button)findViewById(R.id.animal_save);
         save.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +99,12 @@ public class AddAnimal extends AppCompatActivity{
 
                 String weight = ((EditText)findViewById(R.id.weight)).getText().toString();
                 if(weight == null || weight.length() == 0) {
-                    UiHelpers.showToast(actual, R.string.no_name_weight, Toast.LENGTH_SHORT);
+                    UiHelpers.showToast(actual, R.string.no_weight_error, Toast.LENGTH_SHORT);
+                    return;
+                }
+
+                if(type == null) {
+                    UiHelpers.showToast(actual, R.string.no_type_error, Toast.LENGTH_SHORT);
                     return;
                 }
 
@@ -60,6 +112,7 @@ public class AddAnimal extends AppCompatActivity{
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_NAME, name);
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_BIRTH, newFragment.getDate().getTime().getTime());
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_WEIGHT, Integer.parseInt(weight));
+                values.put(AnimalsProvider.AnimalEntry.COLUMN_TYPE, type);
 
                 long row = db.insert(AnimalsProvider.AnimalEntry.TABLE_NAME, null, values);
                 if(row == -1) {

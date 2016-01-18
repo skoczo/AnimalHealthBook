@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook;
+package com.skoczo.animalhealthbook.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.add.AddAnimal;
 
 public class MainActivity extends AppCompatActivity {
 
