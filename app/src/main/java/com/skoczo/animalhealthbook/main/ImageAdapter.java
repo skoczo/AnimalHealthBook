@@ -85,7 +85,7 @@ public class ImageAdapter extends BaseAdapter {
         checkable.addView(view);
 
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
-        image.setPadding(8, 8, 8, 8);
+//        image.setPadding(8, 8, 8, 8);
         switch (animals.get(position).type) {
             case 0:
                 image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_silhouette));
@@ -100,7 +100,6 @@ public class ImageAdapter extends BaseAdapter {
                 image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.horse_silhouette));
                 break;
         };
-//        image.setImageResource(R.drawable.cat_silhouette);
 
         ((TextView) view.findViewById(R.id.mainAnimalName)).setText(animals.get(position).name);
         ((TextView) view.findViewById(R.id.db_id)).setText(animals.get(position).id.toString());

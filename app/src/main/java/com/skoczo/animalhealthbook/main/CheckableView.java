@@ -1,9 +1,10 @@
 package com.skoczo.animalhealthbook.main;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
+
+import com.skoczo.animalhealthbook.R;
 
 /**
  * Created by skoczo on 17.01.16.
@@ -19,12 +20,15 @@ class CheckableView extends LinearLayout implements Checkable {
     @Override
     public void setChecked(boolean checked) {
         this.checked = checked;
-
+        LinearLayout frame = (LinearLayout)findViewById(R.id.frame);
         if (checked) {
-            setBackgroundColor(Color.parseColor("#6633b5e5"));
+//            frame.setBackgroundColor(Color.parseColor("#6633b5e5"));
+            frame.setBackground(getResources().getDrawable(R.drawable.border_selected));
         } else {
-            setBackgroundColor(Color.parseColor("#00000000"));
+//            frame.setBackgroundColor(Color.parseColor("#00000000"));
+            frame.setBackground(getResources().getDrawable(R.drawable.border));
         }
+
     }
 
     @Override

@@ -9,19 +9,11 @@
     tools:context=".main.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/gridview">
-        
-    </LinearLayout>
-
     <GridView
         android:id="@+id/gridview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:columnWidth="310px"
         android:numColumns="auto_fit"
         android:gravity="center"
         />
