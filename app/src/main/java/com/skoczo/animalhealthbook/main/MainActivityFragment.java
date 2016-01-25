@@ -1,5 +1,6 @@
 package com.skoczo.animalhealthbook.main;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.animal_view.AnimalView;
 import com.skoczo.database.AnimalsProvider;
 import com.skoczo.database.DbHelper;
 import com.skoczo.helpers.UiHelpers;
@@ -153,8 +156,9 @@ public class MainActivityFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(getContext(), "" + position,
-                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), AnimalView.class);
+                intent.putExtra("key", ((TextView)v.findViewById(R.id.db_id)).getText());
+                startActivity(intent);
             }
         });
 

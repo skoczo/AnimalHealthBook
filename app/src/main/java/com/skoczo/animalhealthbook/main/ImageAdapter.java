@@ -4,10 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
@@ -83,6 +85,24 @@ public class ImageAdapter extends BaseAdapter {
         View view = inflater.inflate(R.layout.animal_main_layout, null);
         CheckableView checkable = new CheckableView(mContext);
         checkable.addView(view);
+
+        checkable.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                LinearLayout frame = (LinearLayout)v.findViewById(R.id.frame);
+
+                switch(event.getAction()) {
+
+                    case MotionEvent.ACTION_DOWN:
+                        frame.setBackground(v.getContext().getResources().getDrawable(R.drawable.border_selected));
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        frame.setBackground(v.getContext().getResources().getDrawable(R.drawable.border));
+                        break;
+                }
+                return false;
+            }
+        });
 
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
 //        image.setPadding(8, 8, 8, 8);

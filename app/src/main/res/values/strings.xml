@@ -18,4 +18,6 @@
 
     <string name="spinner_title">Select Category</string>
     <string name="no_type_error">Please select type of animal</string>
+    <string name="title_activity_animal_view">AnimalView</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

@@ -9,7 +9,7 @@ import com.skoczo.animalhealthbook.R;
 /**
  * Created by skoczo on 17.01.16.
  */
-class CheckableView extends LinearLayout implements Checkable {
+class CheckableView extends LinearLayout implements Checkable{
 
     private boolean checked;
 
@@ -22,10 +22,8 @@ class CheckableView extends LinearLayout implements Checkable {
         this.checked = checked;
         LinearLayout frame = (LinearLayout)findViewById(R.id.frame);
         if (checked) {
-//            frame.setBackgroundColor(Color.parseColor("#6633b5e5"));
             frame.setBackground(getResources().getDrawable(R.drawable.border_selected));
         } else {
-//            frame.setBackgroundColor(Color.parseColor("#00000000"));
             frame.setBackground(getResources().getDrawable(R.drawable.border));
         }
 
