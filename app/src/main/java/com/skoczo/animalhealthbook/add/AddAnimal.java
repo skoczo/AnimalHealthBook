@@ -110,7 +110,7 @@ public class AddAnimal extends AppCompatActivity{
 
                 ContentValues values = new ContentValues();
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_NAME, name);
-                values.put(AnimalsProvider.AnimalEntry.COLUMN_BIRTH, newFragment.getDate().getTime().getTime());
+                values.put(AnimalsProvider.AnimalEntry.COLUMN_BIRTH, Long.toString(newFragment.getDate().getTime().getTime()));
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_WEIGHT, Integer.parseInt(weight));
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_TYPE, type);
 

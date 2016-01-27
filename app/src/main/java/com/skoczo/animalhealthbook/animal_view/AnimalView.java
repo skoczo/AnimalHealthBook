@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.animal_view.info.AnimalInfo;
 
 public class AnimalView extends AppCompatActivity {
 
@@ -37,6 +38,8 @@ public class AnimalView extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private String key;
+    private AnimalInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,18 @@ public class AnimalView extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                // TODO: 
+                key = null;
+            } else {
+                key = extras.getString("key");
+            }
+        } else {
+            key = (String) savedInstanceState.getSerializable("key");
+        }
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -138,6 +153,10 @@ public class AnimalView extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            if (position == 0) {
+                return AnimalInfo.newInstance(key);
+            }
+
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
@@ -153,11 +172,11 @@ public class AnimalView extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Info";
                 case 1:
-                    return "SECTION 2";
+                    return "Calendar";
                 case 2:
-                    return "SECTION 3";
+                    return "Costs";
             }
             return null;
         }

@@ -129,8 +129,3 @@ public class ImageAdapter extends BaseAdapter {
     }
 }
 
-class AnimalData {
-    public String name;
-    public Integer id;
-    public Integer type;
-}
