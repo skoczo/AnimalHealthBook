@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DbHelper extends SQLiteOpenHelper {
     private static String DB_NAME= "animalhealthbook.db";
-    private static int DB_VERSION = 3;
+    private static int DB_VERSION = 4;
 
     public DbHelper(Context context) {
         super(context,DB_NAME, null, DB_VERSION);
@@ -22,7 +22,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 + AnimalsProvider.AnimalEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + AnimalsProvider.AnimalEntry.COLUMN_BIRTH + " INTEGER NOT NULL,"
                 + AnimalsProvider.AnimalEntry.COLUMN_WEIGHT + " INTEGER NOT NULL, "
-                + AnimalsProvider.AnimalEntry.COLUMN_TYPE+ " INTEGER NOT NULL "
+                + AnimalsProvider.AnimalEntry.COLUMN_TYPE + " INTEGER NOT NULL, "
+                + AnimalsProvider.AnimalEntry.COLUMN_BREED + " TEXT NOT NULL "
                 + ");";
 
         db.execSQL(ANIMALS_DB_CREATE);
@@ -31,7 +32,10 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO: not delete data from DB on upgrade
-        db.execSQL("DROP TABLE IF EXISTS " + AnimalsProvider.AnimalEntry.TABLE_NAME);
-        onCreate(db);
+        if(oldVersion == 3 && newVersion == 4) {
+            db.execSQL("DROP TABLE IF EXISTS " + AnimalsProvider.AnimalEntry.TABLE_NAME);
+            onCreate(db);
+//            db.execSQL("ALTER TABLE " + AnimalsProvider.AnimalEntry.TABLE_NAME + " add column " + AnimalsProvider.AnimalEntry.COLUMN_BREED + " TEXT NOT NULL");
+        }
     }
 }

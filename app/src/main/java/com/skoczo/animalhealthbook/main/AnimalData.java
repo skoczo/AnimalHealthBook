@@ -8,4 +8,6 @@ public class AnimalData {
     public Integer id;
     public Integer type;
     public long birth;
+    public long weight;
+    public String breed;
 }

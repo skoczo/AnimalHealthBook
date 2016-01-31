@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skoczo.animalhealthbook.R;
@@ -108,11 +109,18 @@ public class AddAnimal extends AppCompatActivity{
                     return;
                 }
 
+                String breed = ((TextView)findViewById(R.id.animal_add_breed)).getText().toString();
+                if(breed.isEmpty()) {
+                    UiHelpers.showToast(actual, R.string.no_breed_error, Toast.LENGTH_SHORT);
+                    return;
+                }
+
                 ContentValues values = new ContentValues();
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_NAME, name);
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_BIRTH, Long.toString(newFragment.getDate().getTime().getTime()));
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_WEIGHT, Integer.parseInt(weight));
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_TYPE, type);
+                values.put(AnimalsProvider.AnimalEntry.COLUMN_BREED, breed);
 
                 long row = db.insert(AnimalsProvider.AnimalEntry.TABLE_NAME, null, values);
                 if(row == -1) {

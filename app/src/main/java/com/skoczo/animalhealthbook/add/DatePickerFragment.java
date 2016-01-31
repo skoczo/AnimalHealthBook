@@ -34,7 +34,7 @@ public class DatePickerFragment extends DialogFragment
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         date.set(YEAR, year);
         date.set(MONTH, monthOfYear);
-        date.set(DAY_OF_MONTH, DAY_OF_MONTH);
+        date.set(DAY_OF_MONTH, dayOfMonth);
 
         picked = true;
 

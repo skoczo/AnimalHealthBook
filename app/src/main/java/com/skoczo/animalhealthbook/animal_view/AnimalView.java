@@ -40,6 +40,7 @@ public class AnimalView extends AppCompatActivity {
     private ViewPager mViewPager;
     private String key;
     private AnimalInfo info;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class AnimalView extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,9 +155,11 @@ public class AnimalView extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
+                fab.setVisibility(View.GONE);
                 return AnimalInfo.newInstance(key);
             }
 
+            fab.setVisibility(View.VISIBLE);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);

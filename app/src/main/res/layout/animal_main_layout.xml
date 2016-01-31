@@ -7,8 +7,10 @@
     <LinearLayout
         android:id="@+id/frame"
         android:layout_width="300px"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="330px"
+
+        android:layout_marginBottom="35px"
+        android:layout_marginTop="15px"
         android:background="@drawable/border"
         android:gravity="center"
         android:orientation="vertical">

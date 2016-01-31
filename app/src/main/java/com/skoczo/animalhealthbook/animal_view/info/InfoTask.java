@@ -54,14 +54,38 @@ public class InfoTask extends AsyncTask<Void, Void, Void> {
         animal.id = animalCursor.getInt(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry._ID));
         animal.type = animalCursor.getInt(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_TYPE));
         animal.birth = animalCursor.getLong(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_BIRTH));
+        animal.weight = animalCursor.getLong(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_WEIGHT));
+        animal.breed = animalCursor.getString(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_BREED));
 
         animalCursor.close();
 
+        /* name */
         fragment.setName(animal.name);
+
+        /* birth */
         Calendar cal  = Calendar.getInstance();
-        Date d = new Date();
-        d.setTime(animal.birth);
-        fragment.setBorn(dateFormat.format(d));
+        Date birth = new Date();
+        birth.setTime(animal.birth);
+        fragment.setBorn(dateFormat.format(birth));
+
+        /* age */
+        long current = Calendar.getInstance().getTime().getTime();
+        long age =  current - birth.getTime();
+
+        long days = age / (1000 * 60 *60 *24);
+        long years = days / 365;
+
+        days = days % 365;
+
+        // TODO: language convertion
+        if(years != 0) {
+            fragment.setAge(years + "years and " + days + " days");
+        } else {
+            fragment.setAge( days + " days");
+        }
+
+        /* weight */
+        fragment.setWeight(Long.toString(animal.weight));
 
         switch (animal.type) {
             case 0:
@@ -77,6 +101,9 @@ public class InfoTask extends AsyncTask<Void, Void, Void> {
                 fragment.setImage(context.getResources().getDrawable(R.drawable.horse_silhouette));
                 break;
         };
+
+        /* breed */
+        fragment.setBreed(animal.breed);
 
         return null;
     }
