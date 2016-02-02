@@ -46,24 +46,7 @@ public class ImageAdapter extends BaseAdapter {
                 null // columns to group by
         );
 
-        animals = new ArrayList<AnimalData>();
-
-        if (weatherCursor.getCount() == 0) {
-            return;
-        }
-
-        weatherCursor.moveToFirst();
-
-        do {
-            AnimalData animal = new AnimalData();
-            animal.name = weatherCursor.getString(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_NAME));
-            animal.id = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry._ID));
-            animal.type = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_TYPE));
-            animals.add(animal);
-
-        } while (weatherCursor.moveToNext());
-
-        weatherCursor.close();
+        manageAnimals(weatherCursor);
     }
 
     public int getCount() {
@@ -126,6 +109,39 @@ public class ImageAdapter extends BaseAdapter {
 
         return checkable;
 
+    }
+
+    public void loadAnimals(CharSequence s) {
+        Cursor weatherCursor = mContext.getContentResolver().query(
+                AnimalsProvider.AnimalEntry.CONTENT_URI,  // Table to Query
+                null, // leaving "columns" null just returns all the columns.
+                AnimalsProvider.AnimalEntry.COLUMN_NAME  + " like \"" + s + "%\"", // cols for "where" clause
+                null, // values for "where" clause
+                null // columns to group by
+        );
+
+        manageAnimals(weatherCursor);
+    }
+
+    private void manageAnimals(Cursor weatherCursor) {
+        animals = new ArrayList<AnimalData>();
+
+        if (weatherCursor.getCount() == 0) {
+            return;
+        }
+
+        weatherCursor.moveToFirst();
+
+        do {
+            AnimalData animal = new AnimalData();
+            animal.name = weatherCursor.getString(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_NAME));
+            animal.id = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry._ID));
+            animal.type = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_TYPE));
+            animals.add(animal);
+
+        } while (weatherCursor.moveToNext());
+
+        weatherCursor.close();
     }
 }
 

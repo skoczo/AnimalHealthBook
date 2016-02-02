@@ -48,6 +48,11 @@ public class MainActivityFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    public void search(String search) {
+        adapter.loadAnimals(search);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,7 +105,7 @@ public class MainActivityFragment extends Fragment {
                     SparseBooleanArray checked = gridview.getCheckedItemPositions();
                     String where = buildWhere(checked);
 
-                    if(where.length() == 0) {
+                    if (where.length() == 0) {
                         Log.e(TAG, "where statement empty");
                     } else {
                         int deleted = db.delete(AnimalsProvider.AnimalEntry.TABLE_NAME, where, null);
@@ -157,7 +162,7 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Intent intent = new Intent(getContext(), AnimalView.class);
-                intent.putExtra("key", ((TextView)v.findViewById(R.id.db_id)).getText());
+                intent.putExtra("key", ((TextView) v.findViewById(R.id.db_id)).getText());
                 startActivity(intent);
             }
         });
