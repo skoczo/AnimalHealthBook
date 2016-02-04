@@ -79,9 +79,9 @@ public class InfoTask extends AsyncTask<Void, Void, Void> {
 
         // TODO: language convertion
         if(years != 0) {
-            fragment.setAge(years + "years and " + days + " days");
+            fragment.setAge(years + " " + (years > 1 ? fragment.getResources().getText(R.string.years).toString() : fragment.getResources().getText(R.string.year).toString()) + " " +  fragment.getResources().getText(R.string.and).toString() + " " +  days + " " +  (days > 1 ? fragment.getResources().getText(R.string.days).toString() : fragment.getResources().getText(R.string.day).toString()));
         } else {
-            fragment.setAge( days + " days");
+            fragment.setAge(days + " " +  (days > 1 ? fragment.getResources().getText(R.string.days).toString() : fragment.getResources().getText(R.string.day).toString()));
         }
 
         /* weight */
