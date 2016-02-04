@@ -1,22 +1,20 @@
 package com.skoczo.animalhealthbook.animal_view;
 
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
@@ -40,7 +38,6 @@ public class AnimalView extends AppCompatActivity {
     private ViewPager mViewPager;
     private String key;
     private AnimalInfo info;
-    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +66,25 @@ public class AnimalView extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mSectionsPagerAdapter.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
 
@@ -110,7 +113,7 @@ public class AnimalView extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements  DynamicFabUpdater {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -138,15 +141,26 @@ public class AnimalView extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_animal_view, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
             return rootView;
         }
+
+        @Override
+        public void fabUpdate()
+        {
+            FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.animal_view_fab);
+            fab.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_menu_add));
+            fab.setVisibility(View.VISIBLE);
+        }
+
     }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements ViewPager.OnPageChangeListener {
+        Fragment[] items = new Fragment[getCount()];
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -155,14 +169,17 @@ public class AnimalView extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                fab.setVisibility(View.GONE);
-                return AnimalInfo.newInstance(key);
+                if(items[position] == null) {
+                    items[position] = AnimalInfo.newInstance(key);
+                }
+                return items[position];
             }
 
-            fab.setVisibility(View.VISIBLE);
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+            items[position] = PlaceholderFragment.newInstance(position + 1);
+            return items[position];
         }
 
         @Override
@@ -182,6 +199,21 @@ public class AnimalView extends AppCompatActivity {
                     return "Costs";
             }
             return null;
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            DynamicFabUpdater info = (DynamicFabUpdater)items[position];
+            info.fabUpdate();
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
         }
     }
 }

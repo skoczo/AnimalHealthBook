@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.animal_view.DynamicFabUpdater;
 
 import java.io.Serializable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AnimalInfo extends Fragment implements Serializable{
+public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpdater{
     private String id;
     private InfoTask infoTask;
     private ImageView image;
@@ -40,7 +42,6 @@ public class AnimalInfo extends Fragment implements Serializable{
         if (savedInstanceState != null) {
             id = savedInstanceState.getString("id");
         }
-
     }
 
     @Override
@@ -50,8 +51,6 @@ public class AnimalInfo extends Fragment implements Serializable{
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_animal_info, container, false);
-
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
 
         image = (ImageView) v.findViewById(R.id.animal_info_img);
         name = (TextView) v.findViewById(R.id.animal_view_name);
@@ -64,7 +63,16 @@ public class AnimalInfo extends Fragment implements Serializable{
         infoTask.setFragment(this);
         infoTask.execute();
 
+        // TODO: listener
+
         return v;
+    }
+
+    @Override
+    public void fabUpdate() {
+        FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.animal_view_fab);
+        fab.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_menu_edit));
+        fab.setVisibility(View.VISIBLE);
     }
 
     @Override
