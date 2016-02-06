@@ -1,5 +1,6 @@
 package com.skoczo.animalhealthbook.animal_view.info;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.add.AddAnimal;
 import com.skoczo.animalhealthbook.animal_view.DynamicFabUpdater;
 
 import java.io.Serializable;
@@ -28,7 +30,6 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
     private TextView ageText;
     private TextView weight;
     private TextView breed;
-//    private OnFragmentInteractionListener mListener;
 
     public AnimalInfo() {
         // Required empty public constructor
@@ -65,7 +66,18 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
 
         // TODO: listener
 
+        fabUpdate();
+
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        infoTask = new InfoTask(getContext(), id);
+        infoTask.setFragment(this);
+        infoTask.execute();
     }
 
     @Override
@@ -73,6 +85,15 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
         FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.animal_view_fab);
         fab.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_menu_edit));
         fab.setVisibility(View.VISIBLE);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AddAnimal.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

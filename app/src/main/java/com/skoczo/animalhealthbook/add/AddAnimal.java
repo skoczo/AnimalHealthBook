@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.edit.EditTask;
 import com.skoczo.database.AnimalsProvider;
 import com.skoczo.database.DbHelper;
 import com.skoczo.helpers.UiHelpers;
@@ -32,6 +33,7 @@ public class AddAnimal extends AppCompatActivity{
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private DatePickerFragment newFragment;
     private Integer type = null;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,25 +124,46 @@ public class AddAnimal extends AppCompatActivity{
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_TYPE, type);
                 values.put(AnimalsProvider.AnimalEntry.COLUMN_BREED, breed);
 
-                long row = db.insert(AnimalsProvider.AnimalEntry.TABLE_NAME, null, values);
-                if(row == -1) {
-                    UiHelpers.showToast(actual, "Cannot add animal to db", Toast.LENGTH_SHORT);
+                long row;
+
+                if(id == null) {
+                    row = db.insert(AnimalsProvider.AnimalEntry.TABLE_NAME, null, values);
                 } else {
-                    UiHelpers.showToast(actual, "Animal succesfully added", Toast.LENGTH_SHORT);
-                    actual.onBackPressed();
+                    row = db.update(AnimalsProvider.AnimalEntry.TABLE_NAME, values, AnimalsProvider.AnimalEntry._ID + " == " + id, null);
+                }
+                if(row == -1) {
+                    UiHelpers.showToast(actual, "Cannot " + id != null ? "update" : "add" + " animal to db", Toast.LENGTH_SHORT);
+                } else {
+                    UiHelpers.showToast(actual, "Animal succesfully " + id != null ? "updated" : "added", Toast.LENGTH_SHORT);
+                            actual.onBackPressed();
                 }
             }
         });
+
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle.getString("id")!= null) {
+            id=bundle.getString("id");
+            EditTask edit = new EditTask(id, this);
+            edit.execute();
+        }
     }
 
     public void showTimePickerDialog(View v) {
         newFragment = new DatePickerFragment();
+        newFragment.setActivity(this);
         newFragment.setDate(bornDate);
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
+    public void editTimePickerDialog(long date) {
+        newFragment = new DatePickerFragment();
+        newFragment.setActivity(this);
+        newFragment.setDate(bornDate);
+        newFragment.setDate(date);
+    }
+
     public void datePickerListener() {
-        Toast.makeText(getApplicationContext(), "Date picked", Toast.LENGTH_SHORT).show();
         ((Button)findViewById(R.id.born_date_button)).setText(dateFormat.format(bornDate.getTime()));
     }
 

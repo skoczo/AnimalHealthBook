@@ -18,13 +18,23 @@ import static java.util.Calendar.YEAR;
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
+
     private boolean picked = false;
     private Calendar date;
+    private AddAnimal addAnimal;
+
+    public void setActivity(AddAnimal addAnimal) {
+        this.addAnimal = addAnimal;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
+
+        if(picked) {
+            ((AddAnimal) getActivity()).datePickerListener();
+        }
 
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -39,6 +49,14 @@ public class DatePickerFragment extends DialogFragment
         picked = true;
 
         ((AddAnimal)getActivity()).datePickerListener();
+    }
+
+    public void setDate(long date) {
+        this.date.setTimeInMillis(date);
+
+        picked = true;
+
+        addAnimal.datePickerListener();
     }
 
     public void setDate(Calendar date) {
