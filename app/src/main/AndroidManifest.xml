@@ -24,6 +24,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/search" />
         </activity>
+
         <activity android:name=".add.AddAnimal">
         </activity>
 

@@ -1,47 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300px"
-    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/frame"
-        android:layout_width="300px"
-        android:layout_height="330px"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
 
-        android:layout_marginBottom="35px"
-        android:layout_marginTop="15px"
-        android:background="@drawable/border"
-        android:gravity="center"
-        android:orientation="vertical">
+    android:background="@drawable/selector"
+    android:gravity="center"
+    android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="290px"
-            android:layout_height="290px"
-            android:layout_gravity="center"
-            android:layout_marginBottom="-20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/cat_silhouette" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="290px"
+        android:layout_height="290px"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/cat_silhouette" />
 
-        <TextView
-            android:id="@+id/mainAnimalName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Default Text"
-            android:textSize="22dp"
-            android:textStyle="normal" />
+    <TextView
+        android:id="@+id/mainAnimalName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Default Text"
+        android:textSize="22dp"
+        android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/db_id"
-            android:layout_width="0px"
-            android:layout_height="0px"
-            android:enabled="false"
-            android:text="New Text"
-            android:visibility="invisible" />
-    </LinearLayout>
-</FrameLayout>
+    <TextView
+        android:id="@+id/db_id"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:enabled="false"
+        android:text="New Text"
+        android:visibility="invisible" />
+</LinearLayout>

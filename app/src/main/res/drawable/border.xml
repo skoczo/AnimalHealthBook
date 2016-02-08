@@ -3,9 +3,9 @@
     android:shape="rectangle" >
 
     <!-- view background color -->
-    <solid
-        android:color="#fff" >
-    </solid>
+    <!--<solid-->
+        <!--android:color="#fff" >-->
+    <!--</solid>-->
 
     <!-- view border color and width -->
     <stroke
@@ -14,8 +14,8 @@
     </stroke>
 
     <!-- The radius makes the corners rounded -->
-    <corners
-        android:radius="2dp"   >
-    </corners>
+    <!--<corners-->
+        <!--android:radius="2dp"   >-->
+    <!--</corners>-->
 
 </shape>
