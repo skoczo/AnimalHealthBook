@@ -3,10 +3,9 @@ package com.skoczo.animalhealthbook.animal_view.info;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +20,7 @@ import java.io.Serializable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpdater{
+public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpdater {
     private String id;
     private InfoTask infoTask;
     private ImageView image;
@@ -43,6 +42,8 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
         if (savedInstanceState != null) {
             id = savedInstanceState.getString("id");
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -82,18 +83,33 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
 
     @Override
     public void fabUpdate() {
-        FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.animal_view_fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_menu_edit));
-        fab.setVisibility(View.VISIBLE);
+//        FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.animal_view_fab);
+//        fab.setImageDrawable(ContextCompat.getDrawable(getContext(), android.R.drawable.ic_menu_edit));
+//        fab.setVisibility(View.VISIBLE);
+//
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), AddAnimal.class);
+//                intent.putExtra("id", id);
+//                startActivity(intent);
+//            }
+//        });
+    }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddAnimal.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.animal_view_edit_action) {
+            Intent intent = new Intent(getContext(), AddAnimal.class);
+            intent.putExtra("id", this.id);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
