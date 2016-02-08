@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.animal_view.info.AnimalInfo;
+import com.skoczo.animalhealthbook.animal_view.costs.CostsFragment;
 
 public class AnimalView extends AppCompatActivity {
 
@@ -148,6 +149,9 @@ public class AnimalView extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 0) {
                 return AnimalInfo.newInstance(key);
+            }
+            if(position == 1) {
+                return CostsFragment.newInstance(1);
             }
 
             return PlaceholderFragment.newInstance(position + 1);

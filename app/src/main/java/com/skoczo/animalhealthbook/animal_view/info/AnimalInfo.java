@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,6 +97,13 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_animal_view, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
