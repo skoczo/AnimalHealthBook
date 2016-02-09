@@ -147,7 +147,7 @@ public class AnimalNGMainFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            adapter = new MyItemRecyclerViewAdapter(animals, mListener);
+            adapter = new MyItemRecyclerViewAdapter(animals, mListener, getContext());
             recyclerView.setAdapter(adapter);
         }
 
@@ -172,5 +172,10 @@ public class AnimalNGMainFragment extends Fragment {
         super.onDetach();
 
         mListener = null;
+    }
+
+    public void search(String newText) {
+        loadAnimals(newText);
+        adapter.notifyDataSetChanged();
     }
 }

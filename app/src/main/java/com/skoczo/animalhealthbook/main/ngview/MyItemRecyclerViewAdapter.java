@@ -1,9 +1,13 @@
 package com.skoczo.animalhealthbook.main.ngview;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
@@ -21,13 +25,23 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     private final List<AnimalData> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private static int colors[] = { Color.parseColor("#9E7394"), Color.parseColor("#77DD77"), Color.parseColor("#77DD77"), Color.parseColor("#CFCFC4")};
+    private final Drawable horse;
+    private final Drawable cow;
+    private final Drawable dog;
+    private final Drawable cat;
 
     // Start with first item selected
     private int focusedItem = -1;
 
-    public MyItemRecyclerViewAdapter(List<AnimalData> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<AnimalData> items, OnListFragmentInteractionListener listener, Context ctx) {
         mValues = items;
         mListener = listener;
+
+        cat = ctx.getResources().getDrawable(R.drawable.cat_silhouette);
+        dog = ctx.getResources().getDrawable(R.drawable.dog_silhouette);
+        cow = ctx.getResources().getDrawable(R.drawable.cow_silhouette);
+        horse = ctx.getResources().getDrawable(R.drawable.horse_silhouette);
     }
 
     public void resetSelection()
@@ -42,7 +56,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.animal_main_layout, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, parent.getContext());
     }
 
     @Override
@@ -50,6 +64,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.mItem = mValues.get(position);
         holder.db_id.setText(mValues.get(position).id.toString());
         holder.mainAnimalName.setText(mValues.get(position).name);
+        holder.setBackground(position);
+        holder.setImage();
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,10 +91,13 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView db_id;
         public final TextView mainAnimalName;
         public AnimalData mItem;
+        private int position;
 
-        public ViewHolder(View view) {
+
+        public ViewHolder(View view, Context context) {
             super(view);
             mView = view;
+
             db_id = (TextView) view.findViewById(R.id.db_id);
             mainAnimalName = (TextView) view.findViewById(R.id.mainAnimalName);
 
@@ -107,6 +126,32 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         @Override
         public String toString() {
             return super.toString() + " '" + mainAnimalName.getText() + "'";
+        }
+        
+        public void setImage()
+        {
+            ImageView image = (ImageView) mView.findViewById(R.id.imageView);
+
+            switch (mItem.type) {
+                case 0:
+                    image.setImageDrawable(cat);
+                    break;
+                case 1:
+                    image.setImageDrawable(dog);
+                    break;
+                case 2:
+                    image.setImageDrawable(cow);
+                    break;
+                case 3:
+                    image.setImageDrawable(horse);
+                    break;
+            };
+        }
+        
+
+        public void setBackground(int position) {
+            this.position = position;
+//            mView.setBackgroundColor(colors[position%colors.length]);
         }
     }
 }

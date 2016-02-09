@@ -142,7 +142,7 @@ public class AddAnimal extends AppCompatActivity{
 
         Bundle bundle = getIntent().getExtras();
 
-        if(bundle.getString("id")!= null) {
+        if(bundle!= null && bundle.getString("id") !=  null) {
             id=bundle.getString("id");
             EditTask edit = new EditTask(id, this);
             edit.execute();

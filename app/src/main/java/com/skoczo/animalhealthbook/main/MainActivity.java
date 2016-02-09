@@ -20,6 +20,7 @@ import android.view.View;
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.add.AddAnimal;
 import com.skoczo.animalhealthbook.animal_view.AnimalView;
+import com.skoczo.animalhealthbook.main.ngview.AnimalNGMainFragment;
 import com.skoczo.animalhealthbook.main.ngview.OnListFragmentInteractionListener;
 
 import java.util.List;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
             public boolean onQueryTextChange(String newText) {
                 FragmentManager fm = getSupportFragmentManager();
                 List<Fragment> fragments = fm.getFragments();
-                MainActivityFragment mainFragment = (MainActivityFragment)fragments.get(fragments.size() - 1);
+                AnimalNGMainFragment mainFragment = (AnimalNGMainFragment)fragments.get(fragments.size() - 1);
 
                 mainFragment.search(newText);
 
