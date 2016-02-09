@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook.main;
+package com.skoczo.animalhealthbook.main.oldview;
 
 import android.content.Context;
 import android.widget.Checkable;

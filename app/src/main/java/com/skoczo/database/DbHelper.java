@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DbHelper extends SQLiteOpenHelper {
     private static String DB_NAME= "animalhealthbook.db";
-    private static int DB_VERSION = 4;
+    private static int DB_VERSION = 5;
 
     public DbHelper(Context context) {
         super(context,DB_NAME, null, DB_VERSION);
@@ -17,6 +17,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        createAnimalDB(db);
+        // TODO: create cost and cost type db
+    }
+
+    private void createAnimalDB(SQLiteDatabase db) {
         final String ANIMALS_DB_CREATE = "create table " + AnimalsProvider.AnimalEntry.TABLE_NAME + "( "
                 + AnimalsProvider.AnimalEntry._ID + " INTEGER PRIMARY KEY, "
                 + AnimalsProvider.AnimalEntry.COLUMN_NAME + " TEXT NOT NULL, "
@@ -36,6 +41,8 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + AnimalsProvider.AnimalEntry.TABLE_NAME);
             onCreate(db);
 //            db.execSQL("ALTER TABLE " + AnimalsProvider.AnimalEntry.TABLE_NAME + " add column " + AnimalsProvider.AnimalEntry.COLUMN_BREED + " TEXT NOT NULL");
+        } else if(oldVersion == 4 && newVersion == 5) {
+            // TODO: create cost and cost type db
         }
     }
 }

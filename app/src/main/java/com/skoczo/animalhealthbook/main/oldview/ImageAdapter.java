@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook.main;
+package com.skoczo.animalhealthbook.main.oldview;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.animalhealthbook.main.AnimalData;
 import com.skoczo.database.AnimalsProvider;
 import com.skoczo.database.DbHelper;
 

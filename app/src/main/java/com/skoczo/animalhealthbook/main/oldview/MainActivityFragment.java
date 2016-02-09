@@ -1,4 +1,4 @@
-package com.skoczo.animalhealthbook.main;
+package com.skoczo.animalhealthbook.main.oldview;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
