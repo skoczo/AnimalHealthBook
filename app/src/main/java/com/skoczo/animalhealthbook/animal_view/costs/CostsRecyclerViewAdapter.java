@@ -19,10 +19,10 @@ import java.util.List;
  */
 public class CostsRecyclerViewAdapter extends RecyclerView.Adapter<CostsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<CostItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public CostsRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public CostsRecyclerViewAdapter(List<CostItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +37,8 @@ public class CostsRecyclerViewAdapter extends RecyclerView.Adapter<CostsRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).price);
+        holder.mContentView.setText(mValues.get(position).type.getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +61,7 @@ public class CostsRecyclerViewAdapter extends RecyclerView.Adapter<CostsRecycler
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public CostItem mItem;
 
         public ViewHolder(View view) {
             super(view);

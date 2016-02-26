@@ -8,17 +8,38 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by skoczo on 16.01.16.
  */
 public class DbHelper extends SQLiteOpenHelper {
-    private static String DB_NAME= "animalhealthbook.db";
+    private static String DB_NAME = "animalhealthbook.db";
     private static int DB_VERSION = 5;
 
     public DbHelper(Context context) {
-        super(context,DB_NAME, null, DB_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         createAnimalDB(db);
-        // TODO: create cost and cost type db
+        createCostDB(db);
+//        createCostTypeDB(db);
+    }
+
+    private void createCostTypeDB(SQLiteDatabase db) {
+        final String COSTS_DB_CREATE = "create table " + CostTypeProvider.CostTypeEntry.TABLE_NAME + "( "
+                + CostTypeProvider.CostTypeEntry._ID + " INTEGER PRIMARY KEY, "
+                + CostTypeProvider.CostTypeEntry.COLUMN_TYPE + " TEXT NOT NULL "
+                + ");";
+
+        db.execSQL(COSTS_DB_CREATE);
+    }
+
+    private void createCostDB(SQLiteDatabase db) {
+        final String COSTS_DB_CREATE = "create table " + CostProvider.CostEntry.TABLE_NAME + "( "
+                + CostProvider.CostEntry._ID + " INTEGER PRIMARY KEY, "
+                + CostProvider.CostEntry.COLUMN_DATE + " INTEGER NOT NULL, "
+                + CostProvider.CostEntry.COLUMN_PRICE + " REAL   NOT NULL,"
+                + CostProvider.CostEntry.COLUMN_TYPE + " INTEGER NOT NULL "
+                + ");";
+
+        db.execSQL(COSTS_DB_CREATE);
     }
 
     private void createAnimalDB(SQLiteDatabase db) {
@@ -34,15 +55,23 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(ANIMALS_DB_CREATE);
     }
 
+    private void v6_drop(SQLiteDatabase db) {
+        final String COSTS_DB_DROP = "drop table " + CostProvider.CostEntry.TABLE_NAME + ";";
+        db.execSQL(COSTS_DB_DROP);
+
+        final String COSTS_TYPE_DB_DROP = "drop table " + CostTypeProvider.CostTypeEntry.TABLE_NAME + ";";
+        db.execSQL(COSTS_TYPE_DB_DROP);
+    }
+
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO: not delete data from DB on upgrade
-        if(oldVersion == 3 && newVersion == 4) {
-            db.execSQL("DROP TABLE IF EXISTS " + AnimalsProvider.AnimalEntry.TABLE_NAME);
-            onCreate(db);
-//            db.execSQL("ALTER TABLE " + AnimalsProvider.AnimalEntry.TABLE_NAME + " add column " + AnimalsProvider.AnimalEntry.COLUMN_BREED + " TEXT NOT NULL");
-        } else if(oldVersion == 4 && newVersion == 5) {
-            // TODO: create cost and cost type db
+        if (oldVersion == 4 && newVersion == 5) {
+            createCostDB(db);
+//            createCostTypeDB(db);
+        } else if (oldVersion == 5 && newVersion == 6) {
+            v6_drop(db);
+            createCostDB(db);
         }
     }
 }

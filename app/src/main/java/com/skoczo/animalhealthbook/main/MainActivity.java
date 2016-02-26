@@ -4,6 +4,7 @@ package com.skoczo.animalhealthbook.main;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,14 +20,18 @@ import android.view.View;
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.add.AddAnimal;
 import com.skoczo.animalhealthbook.animal_view.AnimalView;
+import com.skoczo.animalhealthbook.animal_view.costs.type.CostTypes;
 import com.skoczo.animalhealthbook.main.ngview.AnimalNGMainFragment;
 import com.skoczo.animalhealthbook.main.ngview.OnListFragmentInteractionListener;
+import com.skoczo.database.AnimalsProvider;
+import com.skoczo.database.DbHelper;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnListFragmentInteractionListener {
     private ActionModeCallback actionModeCallback = new ActionModeCallback();
     private ActionMode actionMode;
+    private AnimalData itemToDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        CostTypes.initialize(getApplicationContext());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -111,10 +117,11 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
     public void itemClicked(int count, AnimalData item) {
         if (count ==0 & actionMode != null) {
             actionMode.finish();
+            this.itemToDelete = null;
         } else {
             actionMode = startSupportActionMode(actionModeCallback);
             actionMode.setTitle("Delete  " + item.name);
-
+            this.itemToDelete = item;
         }
     }
 
@@ -137,8 +144,18 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.animal_delete:
-                    // TODO: actually remove items
-                    Log.d(TAG, "menu_remove");
+                    DbHelper dbHelper = new DbHelper(getApplicationContext());
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                    // TODO: remove costs, calendar entries and other
+
+                    int row = db.delete(AnimalsProvider.AnimalEntry.TABLE_NAME, AnimalsProvider.AnimalEntry._ID + " like " + itemToDelete.id, null);
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    List<Fragment> fragments = fm.getFragments();
+                    AnimalNGMainFragment mainFragment = (AnimalNGMainFragment)fragments.get(fragments.size() - 1);
+                    mainFragment.loadAnimals();
+
                     mode.finish();
                     return true;
 
@@ -149,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-//            adapter.clearSelection();
             actionMode = null;
         }
     }

@@ -17,6 +17,9 @@ public class DbProvider extends ContentProvider {
 
     private DbHelper dbHelper;
     static final int ANIMAL = 100;
+    static final int COST = 200;
+    static final int COST_TYPE = 300;
+
 
     @Override
     public boolean onCreate() {
@@ -36,6 +39,12 @@ public class DbProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, AnimalsProvider.PATH_ANIMAL, ANIMAL);
+
+        final String costAuthority = CostProvider.CONTENT_AUTHORITY;
+        matcher.addURI(costAuthority, CostProvider.PATH_COST, COST);
+
+        final String costTypeAuthority = CostTypeProvider.CONTENT_AUTHORITY;
+        matcher.addURI(costTypeAuthority, CostTypeProvider.PATH_COST_TYPE, COST_TYPE);
 
         return matcher;
     }

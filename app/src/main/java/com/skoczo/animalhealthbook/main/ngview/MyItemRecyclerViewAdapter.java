@@ -12,15 +12,10 @@ import android.widget.TextView;
 
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.main.AnimalData;
-import com.skoczo.animalhealthbook.main.ngview.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<AnimalData> mValues;

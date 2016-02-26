@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 /**
  * Created by skoczo on 09.02.16.
  */
-public class CostTypeProvider {
+class CostTypeProvider {
     public static final String CONTENT_AUTHORITY = "com.skoczo.animalhealthbook";
 
     // Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
@@ -23,7 +23,7 @@ public class CostTypeProvider {
     public static final String PATH_COST_TYPE = "costType";
 
     /* Inner class that defines the table contents of the location table */
-    public static final class CostTypeEntry implements BaseColumns {
+    static final class CostTypeEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_COST_TYPE).build();
@@ -32,6 +32,8 @@ public class CostTypeProvider {
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_COST_TYPE;
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_COST_TYPE;
+
+        public static final String TABLE_NAME = "COST_TYPE";
 
         public static final String COLUMN_TYPE = "TYPE";
 

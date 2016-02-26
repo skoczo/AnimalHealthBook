@@ -33,4 +33,10 @@
     <string name="days">days</string>
     <string name="animal_view_edit_action">Edit</string>
     <string name="animal_view_add_cost_action">Add cost</string>
+    <string name="vaccine">vaccine</string>
+    <string name="treatment">treatment</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_cost">Add cost</string>
+    <string name="cost">cost</string>
 </resources>

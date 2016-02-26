@@ -35,7 +35,6 @@ public class AnimalView extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private String key;
-    private AnimalInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +150,7 @@ public class AnimalView extends AppCompatActivity {
                 return AnimalInfo.newInstance(key);
             }
             if(position == 1) {
-                return CostsFragment.newInstance(1);
+                return CostsFragment.newInstance(1, key);
             }
 
             return PlaceholderFragment.newInstance(position + 1);

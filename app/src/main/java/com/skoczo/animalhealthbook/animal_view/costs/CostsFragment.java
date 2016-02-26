@@ -12,11 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.skoczo.animalhealthbook.R;
-import com.skoczo.animalhealthbook.animal_view.costs.dummy.DummyContent;
-import com.skoczo.animalhealthbook.animal_view.costs.dummy.DummyContent.DummyItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -31,6 +31,8 @@ public class CostsFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 2;
     private CostsFragment.OnListFragmentInteractionListener mListener;
+    private String id;
+    private List<CostItem> costs = new ArrayList<CostItem>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,10 +41,10 @@ public class CostsFragment extends Fragment {
     public CostsFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static CostsFragment newInstance(int columnCount) {
+    public static CostsFragment newInstance(int columnCount, String key) {
         CostsFragment fragment = new CostsFragment();
+        fragment.setId(key);
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -56,9 +58,18 @@ public class CostsFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        if (savedInstanceState != null) {
+            id = savedInstanceState.getString("id");
+        }
+        
 
         setHasOptionsMenu(true);
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +85,7 @@ public class CostsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new CostsRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new CostsRecyclerViewAdapter(costs, mListener));
         }
         return view;
     }
@@ -92,7 +103,9 @@ public class CostsFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.animal_view_add_cost_action) {
-            Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+            AddCostDialog cost = new AddCostDialog();
+            cost.show(getFragmentManager(), this.getClass().getName());
             return true;
         }
 
@@ -123,6 +136,6 @@ public class CostsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(CostItem item);
     }
 }
