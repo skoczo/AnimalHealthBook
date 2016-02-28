@@ -39,4 +39,5 @@
     <string name="cancel">Cancel</string>
     <string name="add_cost">Add cost</string>
     <string name="cost">cost</string>
+    <string name="empty_cost">Cost can\'t be empty</string>
 </resources>

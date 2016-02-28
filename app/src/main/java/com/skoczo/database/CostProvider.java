@@ -35,6 +35,7 @@ public class CostProvider {
 
         public static final String TABLE_NAME = "COSTS";
 
+        public static final String COLUMN_ANIMAL = "ANIMAL_ID";
         public static final String COLUMN_DATE = "DATE";
         public static final String COLUMN_TYPE = "TYPE";
         public static final String COLUMN_PRICE = "PRICE";

@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-public class AddAnimal extends AppCompatActivity{
+public class AddAnimal extends AppCompatActivity implements OnDatePeak{
 
     private Calendar bornDate = Calendar.getInstance();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

@@ -21,23 +21,20 @@ public class DatePickerFragment extends DialogFragment
 
     private boolean picked = false;
     private Calendar date;
-    private AddAnimal addAnimal;
+    private OnDatePeak addAnimal;
 
-    public void setActivity(AddAnimal addAnimal) {
+    public void setActivity(OnDatePeak addAnimal) {
         this.addAnimal = addAnimal;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the current time as the default values for the picker
-        final Calendar c = Calendar.getInstance();
-
         if(picked) {
-            ((AddAnimal) getActivity()).datePickerListener();
+            addAnimal.datePickerListener();
         }
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        return new DatePickerDialog(getActivity(), this, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
     }
 
     @Override
@@ -48,7 +45,7 @@ public class DatePickerFragment extends DialogFragment
 
         picked = true;
 
-        ((AddAnimal)getActivity()).datePickerListener();
+        addAnimal.datePickerListener();
     }
 
     public void setDate(long date) {

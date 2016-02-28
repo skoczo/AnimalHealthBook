@@ -105,6 +105,7 @@ public class CostsFragment extends Fragment {
         if (id == R.id.animal_view_add_cost_action) {
 //            Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
             AddCostDialog cost = new AddCostDialog();
+            cost.setId(this.id);
             cost.show(getFragmentManager(), this.getClass().getName());
             return true;
         }

@@ -34,9 +34,10 @@ public class DbHelper extends SQLiteOpenHelper {
     private void createCostDB(SQLiteDatabase db) {
         final String COSTS_DB_CREATE = "create table " + CostProvider.CostEntry.TABLE_NAME + "( "
                 + CostProvider.CostEntry._ID + " INTEGER PRIMARY KEY, "
+                + CostProvider.CostEntry.COLUMN_ANIMAL + " INTEGER NOT NULL, "
                 + CostProvider.CostEntry.COLUMN_DATE + " INTEGER NOT NULL, "
                 + CostProvider.CostEntry.COLUMN_PRICE + " REAL   NOT NULL,"
-                + CostProvider.CostEntry.COLUMN_TYPE + " INTEGER NOT NULL "
+                + CostProvider.CostEntry.COLUMN_TYPE + " STRING NOT NULL "
                 + ");";
 
         db.execSQL(COSTS_DB_CREATE);
