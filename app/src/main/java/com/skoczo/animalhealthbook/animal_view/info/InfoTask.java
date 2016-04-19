@@ -1,76 +1,53 @@
 package com.skoczo.animalhealthbook.animal_view.info;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.skoczo.animalhealthbook.R;
-import com.skoczo.animalhealthbook.main.AnimalData;
-import com.skoczo.database.AnimalsProvider;
-import com.skoczo.database.DbHelper;
+import com.skoczo.database.Animal;
+import com.skoczo.database.DatabaseHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by skoczo on 26.01.16.
  */
 public class InfoTask extends AsyncTask<Void, Void, Void> {
 
-    private final DbHelper dbHelper;
-    private final SQLiteDatabase db;
     private final String id;
     private Context context;
     private AnimalInfo fragment;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private DatabaseHelper dbHelper;
 
     public InfoTask(Context c, String _id) {
-        dbHelper = new DbHelper(c);
-        db = dbHelper.getReadableDatabase();
+        dbHelper = new DatabaseHelper(c);
         id = _id;
         context = c;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        Cursor animalCursor = context.getContentResolver().query(
-                AnimalsProvider.AnimalEntry.CONTENT_URI,  // Table to Query
-                null, // leaving "columns" null just returns all the columns.
-                "_id = " + id, // cols for "where" clause
-                null, // values for "where" clause
-                null // columns to group by
-        );
+        RuntimeExceptionDao<Animal, Integer> animalDao = dbHelper.getAnimalRuntimeDao();
 
-        if (animalCursor.getCount() == 0) {
+        Animal animal = animalDao.queryForId(Integer.parseInt(id));
+
+        if (animal == null) {
             return null;
         }
 
-        animalCursor.moveToFirst();
-
-        AnimalData animal = new AnimalData();
-        animal.name = animalCursor.getString(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_NAME));
-        animal.id = animalCursor.getInt(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry._ID));
-        animal.type = animalCursor.getInt(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_TYPE));
-        animal.birth = animalCursor.getLong(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_BIRTH));
-        animal.weight = animalCursor.getLong(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_WEIGHT));
-        animal.breed = animalCursor.getString(animalCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_BREED));
-
-        animalCursor.close();
-
         /* name */
-        fragment.setName(animal.name);
+        fragment.setName(animal.getNAME());
 
         /* birth */
         Calendar cal  = Calendar.getInstance();
-        Date birth = new Date();
-        birth.setTime(animal.birth);
-        fragment.setBorn(dateFormat.format(birth));
+        fragment.setBorn(dateFormat.format(animal.getBIRTH()));
 
         /* age */
         long current = Calendar.getInstance().getTime().getTime();
-        long age =  current - birth.getTime();
+        long age =  current - animal.getBIRTH().getTime();
 
         long days = age / (1000 * 60 *60 *24);
         long years = days / 365;
@@ -85,9 +62,9 @@ public class InfoTask extends AsyncTask<Void, Void, Void> {
         }
 
         /* weight */
-        fragment.setWeight(Long.toString(animal.weight));
+        fragment.setWeight(Long.toString(animal.getWEIGHT()));
 
-        switch (animal.type) {
+        switch (animal.getTYPE()) {
             case 0:
                 fragment.setImage(context.getResources().getDrawable(R.drawable.cat_silhouette));
                 break;
@@ -103,7 +80,7 @@ public class InfoTask extends AsyncTask<Void, Void, Void> {
         };
 
         /* breed */
-        fragment.setBreed(animal.breed);
+        fragment.setBreed(animal.getBREED());
 
         return null;
     }

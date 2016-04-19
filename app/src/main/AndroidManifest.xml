@@ -28,11 +28,11 @@
         <activity android:name=".add.AddAnimal">
         </activity>
 
-        <provider
-            android:name="com.skoczo.database.DbProvider"
-            android:authorities="@string/content_authority"
-            android:exported="false"
-            android:syncable="true" />
+        <!--<provider-->
+            <!--android:name="com.skoczo.database.DatabaseHelper"-->
+            <!--android:authorities="@string/content_authority"-->
+            <!--android:exported="false"-->
+            <!--android:syncable="true" />-->
 
         <activity
             android:name=".animal_view.AnimalView"

@@ -4,7 +4,6 @@ package com.skoczo.animalhealthbook.main;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -23,8 +22,6 @@ import com.skoczo.animalhealthbook.animal_view.AnimalView;
 import com.skoczo.animalhealthbook.animal_view.costs.type.CostTypes;
 import com.skoczo.animalhealthbook.main.ngview.AnimalNGMainFragment;
 import com.skoczo.animalhealthbook.main.ngview.OnListFragmentInteractionListener;
-import com.skoczo.database.AnimalsProvider;
-import com.skoczo.database.DbHelper;
 
 import java.util.List;
 
@@ -144,12 +141,12 @@ public class MainActivity extends AppCompatActivity implements OnListFragmentInt
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.animal_delete:
-                    DbHelper dbHelper = new DbHelper(getApplicationContext());
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+//                    DbHelper dbHelper = new DbHelper(getApplicationContext());
+//                    SQLiteDatabase db = dbHelper.getWritableDatabase();
 
                     // TODO: remove costs, calendar entries and other
 
-                    int row = db.delete(AnimalsProvider.AnimalEntry.TABLE_NAME, AnimalsProvider.AnimalEntry._ID + " like " + itemToDelete.id, null);
+//                    int row = db.delete(AnimalsProvider.AnimalEntry.TABLE_NAME, AnimalsProvider.AnimalEntry._ID + " like " + itemToDelete.id, null);
 
                     FragmentManager fm = getSupportFragmentManager();
                     List<Fragment> fragments = fm.getFragments();

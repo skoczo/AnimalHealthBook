@@ -1,9 +1,7 @@
 package com.skoczo.animalhealthbook.add;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,10 +14,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.edit.EditTask;
-import com.skoczo.database.AnimalsProvider;
-import com.skoczo.database.DbHelper;
+import com.skoczo.database.Animal;
+import com.skoczo.database.DatabaseHelper;
 import com.skoczo.helpers.UiHelpers;
 
 import java.text.SimpleDateFormat;
@@ -34,12 +33,14 @@ public class AddAnimal extends AppCompatActivity implements OnDatePeak{
     private DatePickerFragment newFragment;
     private Integer type = null;
     private String id;
+    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_animal);
 
+        dbHelper = new DatabaseHelper(getApplicationContext());
         final Activity actual = this;
 
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
@@ -85,8 +86,8 @@ public class AddAnimal extends AppCompatActivity implements OnDatePeak{
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbHelper dbHelper = new DbHelper(getApplicationContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+//                DbHelper dbHelper = new DbHelper(getApplicationContext());
+//                SQLiteDatabase db = dbHelper.getWritableDatabase();
 
                 String name = ((EditText)findViewById(R.id.animal_name)).getText().toString();
 
@@ -117,20 +118,27 @@ public class AddAnimal extends AppCompatActivity implements OnDatePeak{
                     return;
                 }
 
-                ContentValues values = new ContentValues();
-                values.put(AnimalsProvider.AnimalEntry.COLUMN_NAME, name);
-                values.put(AnimalsProvider.AnimalEntry.COLUMN_BIRTH, Long.toString(newFragment.getDate().getTime().getTime()));
-                values.put(AnimalsProvider.AnimalEntry.COLUMN_WEIGHT, Integer.parseInt(weight));
-                values.put(AnimalsProvider.AnimalEntry.COLUMN_TYPE, type);
-                values.put(AnimalsProvider.AnimalEntry.COLUMN_BREED, breed);
+                Animal newAnimal = new Animal();
+                newAnimal.setBIRTH(newFragment.getDate().getTime());
+                newAnimal.setBREED(breed);
+                newAnimal.setTYPE(type);
+                newAnimal.setNAME(name);
+                newAnimal.setWEIGHT(Integer.parseInt(weight));
 
-                long row;
+                RuntimeExceptionDao<Animal, Integer> animalDao = dbHelper.getAnimalRuntimeDao();
+
+
+                long row = -1;
 
                 if(id == null) {
-                    row = db.insert(AnimalsProvider.AnimalEntry.TABLE_NAME, null, values);
+                    row = animalDao.create(newAnimal);
+//                    row = db.insert(AnimalsProvider.AnimalEntry.TABLE_NAME, null, values);
                 } else {
-                    row = db.update(AnimalsProvider.AnimalEntry.TABLE_NAME, values, AnimalsProvider.AnimalEntry._ID + " == " + id, null);
+                    newAnimal.set_ID(Integer.parseInt(id));
+                    row = animalDao.update(newAnimal);
+//                    row = db.update(AnimalsProvider.AnimalEntry.TABLE_NAME, values, AnimalsProvider.AnimalEntry._ID + " == " + id, null);
                 }
+
                 if(row == -1) {
                     UiHelpers.showToast(actual, "Cannot " + id != null ? "update" : "add" + " animal to db", Toast.LENGTH_SHORT);
                 } else {
@@ -144,7 +152,7 @@ public class AddAnimal extends AppCompatActivity implements OnDatePeak{
 
         if(bundle!= null && bundle.getString("id") !=  null) {
             id=bundle.getString("id");
-            EditTask edit = new EditTask(id, this);
+            EditTask edit = new EditTask(id, this, getApplicationContext());
             edit.execute();
         }
     }

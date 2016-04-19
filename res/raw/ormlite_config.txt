@@ -1,0 +1,25 @@
+#
+# generated on 2016/04/01 07:32:54
+#
+# --table-start--
+dataClass=com.skoczo.database.Animal
+tableName=ANIMALS
+# --table-fields-start--
+# --field-start--
+fieldName=NAME
+# --field-end--
+# --field-start--
+fieldName=BIRTH
+# --field-end--
+# --field-start--
+fieldName=WEIGHT
+# --field-end--
+# --field-start--
+fieldName=TYPE
+# --field-end--
+# --field-start--
+fieldName=BREED
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

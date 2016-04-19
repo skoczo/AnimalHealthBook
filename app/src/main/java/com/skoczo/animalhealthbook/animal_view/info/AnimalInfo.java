@@ -46,6 +46,14 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
         }
 
         setHasOptionsMenu(true);
+
+        infoTask = new InfoTask(getContext(), id);
+        infoTask.setFragment(this);
+        infoTask.execute();
+
+        // TODO: listener
+
+        fabUpdate();
     }
 
     @Override
@@ -62,14 +70,6 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
         ageText = (TextView) v.findViewById(R.id.animal_view_age);
         weight = (TextView) v.findViewById(R.id.animal_view_weight);
         breed = (TextView) v.findViewById(R.id.animal_view_breed);
-
-        infoTask = new InfoTask(getContext(), id);
-        infoTask.setFragment(this);
-        infoTask.execute();
-
-        // TODO: listener
-
-        fabUpdate();
 
         return v;
     }

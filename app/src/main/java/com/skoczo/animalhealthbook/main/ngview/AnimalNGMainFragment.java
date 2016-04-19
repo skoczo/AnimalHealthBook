@@ -1,7 +1,6 @@
 package com.skoczo.animalhealthbook.main.ngview;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,10 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.main.AnimalData;
-import com.skoczo.database.AnimalsProvider;
+import com.skoczo.database.Animal;
+import com.skoczo.database.DatabaseHelper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +37,7 @@ public class AnimalNGMainFragment extends Fragment {
     private int mColumnCount = 2;
     public static List<AnimalData> animals;
     private OnListFragmentInteractionListener mListener;
+    private DatabaseHelper helper;
 
     private MyItemRecyclerViewAdapter adapter;
 
@@ -44,52 +50,62 @@ public class AnimalNGMainFragment extends Fragment {
     }
 
     public void loadAnimals() {
-        Cursor weatherCursor = getContext().getContentResolver().query(
-                AnimalsProvider.AnimalEntry.CONTENT_URI,  // Table to Query
-                null, // leaving "columns" null just returns all the columns.
-                null, // cols for "where" clause
-                null, // values for "where" clause
-                null // columns to group by
-        );
+        RuntimeExceptionDao<Animal, Integer> simpleDao = getHelper().getAnimalRuntimeDao();
+//        Cursor weatherCursor = getContext().getContentResolver().query(
+//                AnimalsProvider.AnimalEntry.CONTENT_URI,  // Table to Query
+//                null, // leaving "columns" null just returns all the columns.
+//                null, // cols for "where" clause
+//                null, // values for "where" clause
+//                null // columns to group by
+//        );
 
-        manageAnimals(weatherCursor);
+        manageAnimals(simpleDao.queryForAll());
     }
 
     public void loadAnimals(CharSequence s) {
-        Cursor weatherCursor = getContext().getContentResolver().query(
-                AnimalsProvider.AnimalEntry.CONTENT_URI,  // Table to Query
-                null, // leaving "columns" null just returns all the columns.
-                AnimalsProvider.AnimalEntry.COLUMN_NAME  + " like \"" + s + "%\"", // cols for "where" clause
-                null, // values for "where" clause
-                null // columns to group by
-        );
+        if (s.length() == 0) {
+            loadAnimals();
+        } else {
+            try {
+                RuntimeExceptionDao<Animal, Integer> simpleDao = getHelper().getAnimalRuntimeDao();
 
-        manageAnimals(weatherCursor);
+                QueryBuilder<Animal, Integer> qb = simpleDao.queryBuilder();
+                Where where = qb.where();
+
+                where.like("NAME", s + "%");
+
+                PreparedQuery<Animal> preparedQuery = qb.prepare();
+
+                manageAnimals(simpleDao.query(preparedQuery));
+            } catch (SQLException e) {
+                // TODO:
+            }
+        }
     }
 
-    private void manageAnimals(Cursor weatherCursor) {
-        if(animals == null) {
+    private void manageAnimals(List<Animal> dbAnimals) {
+        if (animals == null) {
             animals = new ArrayList<AnimalData>();
         } else {
             animals.clear();
         }
 
-        if (weatherCursor.getCount() == 0) {
+
+        if (dbAnimals.size() == 0) {
             return;
         }
 
-        weatherCursor.moveToFirst();
+        for (Animal animal : dbAnimals) {
+            AnimalData animalData = new AnimalData();
+            animalData.name = animal.getNAME();
+            animalData.id = animal.get_ID();
+            animalData.type = animal.getTYPE();
+            animalData.breed = animal.getBREED();
+            animalData.birth = animal.getBIRTH().getTime();
+            animalData.weight = animal.getWEIGHT();
 
-        do {
-            AnimalData animal = new AnimalData();
-            animal.name = weatherCursor.getString(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_NAME));
-            animal.id = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry._ID));
-            animal.type = weatherCursor.getInt(weatherCursor.getColumnIndex(AnimalsProvider.AnimalEntry.COLUMN_TYPE));
-            animals.add(animal);
-
-        } while (weatherCursor.moveToNext());
-
-        weatherCursor.close();
+            animals.add(animalData);
+        }
     }
 
     // TODO: Customize parameter initialization
@@ -177,5 +193,12 @@ public class AnimalNGMainFragment extends Fragment {
     public void search(String newText) {
         loadAnimals(newText);
         adapter.notifyDataSetChanged();
+    }
+
+    public DatabaseHelper getHelper() {
+        if (helper == null) {
+            helper = new DatabaseHelper(getContext());
+        }
+        return helper;
     }
 }

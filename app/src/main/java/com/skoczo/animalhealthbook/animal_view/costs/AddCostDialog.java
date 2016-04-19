@@ -2,9 +2,7 @@ package com.skoczo.animalhealthbook.animal_view.costs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -15,15 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.add.DatePickerFragment;
 import com.skoczo.animalhealthbook.add.OnDatePeak;
 import com.skoczo.animalhealthbook.animal_view.costs.type.CostType;
 import com.skoczo.animalhealthbook.animal_view.costs.type.CostTypes;
-import com.skoczo.database.CostProvider;
-import com.skoczo.database.DbHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,24 +74,24 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DbHelper dbHelper = new DbHelper(getContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-                ContentValues values = new ContentValues();
-                values.put(CostProvider.CostEntry.COLUMN_ANIMAL, id);
-                values.put(CostProvider.CostEntry.COLUMN_DATE, cost_time.getTime().getTime());
-                values.put(CostProvider.CostEntry.COLUMN_TYPE, ((CostType)spinner.getSelectedItem()).getName());
-                values.put(CostProvider.CostEntry.COLUMN_PRICE, cost.getText().toString());
-
-                if(cost.getText().length() == 0) {
-                    Toast.makeText(getContext(), R.string.empty_cost,Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                
-                long result = db.insert(CostProvider.CostEntry.TABLE_NAME, null, values);
-                if(result <= 0) {
-                    Toast.makeText(getContext(), "Can't add cost",Toast.LENGTH_SHORT).show();
-                }
+//                DbHelper dbHelper = new DbHelper(getContext());
+//                SQLiteDatabase db = dbHelper.getWritableDatabase();
+//
+//                ContentValues values = new ContentValues();
+//                values.put(CostProvider.CostEntry.COLUMN_ANIMAL, id);
+//                values.put(CostProvider.CostEntry.COLUMN_DATE, cost_time.getTime().getTime());
+//                values.put(CostProvider.CostEntry.COLUMN_TYPE, ((CostType)spinner.getSelectedItem()).getName());
+//                values.put(CostProvider.CostEntry.COLUMN_PRICE, cost.getText().toString());
+//
+//                if(cost.getText().length() == 0) {
+//                    Toast.makeText(getContext(), R.string.empty_cost,Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                long result = db.insert(CostProvider.CostEntry.TABLE_NAME, null, values);
+//                if(result <= 0) {
+//                    Toast.makeText(getContext(), "Can't add cost",Toast.LENGTH_SHORT).show();
+//                }
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
