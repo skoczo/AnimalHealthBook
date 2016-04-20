@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.animal_view.costs.CostsFragment.OnListFragmentInteractionListener;
 import com.skoczo.animalhealthbook.animal_view.costs.dummy.DummyContent.DummyItem;
+import com.skoczo.database.Cost;
 
 import java.util.List;
 
@@ -19,10 +20,10 @@ import java.util.List;
  */
 public class CostsRecyclerViewAdapter extends RecyclerView.Adapter<CostsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<CostItem> mValues;
+    private final List<Cost> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public CostsRecyclerViewAdapter(List<CostItem> items, OnListFragmentInteractionListener listener) {
+    public CostsRecyclerViewAdapter(List<Cost> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +38,8 @@ public class CostsRecyclerViewAdapter extends RecyclerView.Adapter<CostsRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).price);
-        holder.mContentView.setText(mValues.get(position).type.getName());
+        holder.mIdView.setText(Float.toString(mValues.get(position).getPRICE()));
+        holder.mContentView.setText(mValues.get(position).getTYPE());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +62,7 @@ public class CostsRecyclerViewAdapter extends RecyclerView.Adapter<CostsRecycler
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public CostItem mItem;
+        public Cost mItem;
 
         public ViewHolder(View view) {
             super(view);

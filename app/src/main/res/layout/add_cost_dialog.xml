@@ -20,6 +20,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_cost_dialog_spinner" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment"
+        android:layout_gravity="center_horizontal"
+        android:hint="@string/addComment" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

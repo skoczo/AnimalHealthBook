@@ -13,12 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.skoczo.animalhealthbook.R;
 import com.skoczo.animalhealthbook.add.DatePickerFragment;
 import com.skoczo.animalhealthbook.add.OnDatePeak;
 import com.skoczo.animalhealthbook.animal_view.costs.type.CostType;
 import com.skoczo.animalhealthbook.animal_view.costs.type.CostTypes;
+import com.skoczo.database.Cost;
+import com.skoczo.database.DatabaseHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,12 +39,17 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
     private Button cost_date;
     private String id;
     private EditText cost;
+    private DatabaseHelper dbHelper;
+    private EditText comment;
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        dbHelper = new DatabaseHelper(getContext());
+        final RuntimeExceptionDao<Cost, Integer> costDao = dbHelper.getCostRuntimeDao();
 
         datepicker.setDate(cost_time);
         datepicker.setActivity(this);
@@ -64,6 +73,8 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
             }
         });
 
+        comment = (EditText)view.findViewById(R.id.comment);
+
         CostTypes types = CostTypes.getIntance();
 
         ArrayAdapter<CostType> dataAdapter = new ArrayAdapter<CostType>(getContext(), android.R.layout.simple_spinner_item, new ArrayList<CostType>(types.types.values()));
@@ -74,24 +85,22 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                DbHelper dbHelper = new DbHelper(getContext());
-//                SQLiteDatabase db = dbHelper.getWritableDatabase();
-//
-//                ContentValues values = new ContentValues();
-//                values.put(CostProvider.CostEntry.COLUMN_ANIMAL, id);
-//                values.put(CostProvider.CostEntry.COLUMN_DATE, cost_time.getTime().getTime());
-//                values.put(CostProvider.CostEntry.COLUMN_TYPE, ((CostType)spinner.getSelectedItem()).getName());
-//                values.put(CostProvider.CostEntry.COLUMN_PRICE, cost.getText().toString());
-//
-//                if(cost.getText().length() == 0) {
-//                    Toast.makeText(getContext(), R.string.empty_cost,Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                long result = db.insert(CostProvider.CostEntry.TABLE_NAME, null, values);
-//                if(result <= 0) {
-//                    Toast.makeText(getContext(), "Can't add cost",Toast.LENGTH_SHORT).show();
-//                }
+                Cost costEntity = new Cost();
+                costEntity.setANIMAL_ID(Integer.parseInt(id));
+                costEntity.setDATE(cost_time.getTime());
+                costEntity.setPRICE(Float.parseFloat(cost.getText().toString()));
+                costEntity.setTYPE(((CostType) spinner.getSelectedItem()).getName());
+                costEntity.setCOMMENT(comment.getText().toString());
+
+                if(cost.getText().length() == 0) {
+                    Toast.makeText(getContext(), R.string.empty_cost, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                long result = costDao.create(costEntity);
+                if(result <= 0) {
+                    Toast.makeText(getContext(), "Can't add cost",Toast.LENGTH_SHORT).show();
+                }
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

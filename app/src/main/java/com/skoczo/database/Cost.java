@@ -24,6 +24,9 @@ public class Cost {
     private String TYPE;
 
     @DatabaseField
+    private String COMMENT;
+
+    @DatabaseField
     private float PRICE;
 
     public Integer getANIMAL_ID() {
@@ -32,6 +35,14 @@ public class Cost {
 
     public void setANIMAL_ID(Integer ANIMAL_ID) {
         this.ANIMAL_ID = ANIMAL_ID;
+    }
+
+    public String getCOMMENT() {
+        return COMMENT;
+    }
+
+    public void setCOMMENT(String COMMENT) {
+        this.COMMENT = COMMENT;
     }
 
     public Date getDATE() {

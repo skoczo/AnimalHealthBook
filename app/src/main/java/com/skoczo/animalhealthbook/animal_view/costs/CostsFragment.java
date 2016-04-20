@@ -13,8 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.skoczo.animalhealthbook.R;
+import com.skoczo.database.Cost;
+import com.skoczo.database.DatabaseHelper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +37,8 @@ public class CostsFragment extends Fragment {
     private int mColumnCount = 2;
     private CostsFragment.OnListFragmentInteractionListener mListener;
     private String id;
-    private List<CostItem> costs = new ArrayList<CostItem>();
+    private List<Cost> costs = new ArrayList<Cost>();
+    private DatabaseHelper dbHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -55,6 +61,8 @@ public class CostsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        dbHelper = new DatabaseHelper(getContext());
+
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -76,6 +84,8 @@ public class CostsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_animal_costs_item_list, container, false);
 
+        updateCosts();
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -88,6 +98,18 @@ public class CostsFragment extends Fragment {
             recyclerView.setAdapter(new CostsRecyclerViewAdapter(costs, mListener));
         }
         return view;
+    }
+
+    private void updateCosts() {
+        RuntimeExceptionDao<Cost, Integer> costDao = dbHelper.getCostRuntimeDao();
+
+        QueryBuilder<Cost, Integer> query = costDao.queryBuilder();
+        try {
+            query.where().eq("ANIMAL_ID", id);
+            costs = costDao.query(query.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -137,6 +159,6 @@ public class CostsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(CostItem item);
+        void onListFragmentInteraction(Cost item);
     }
 }

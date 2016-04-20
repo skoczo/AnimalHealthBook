@@ -46,16 +46,11 @@ public class AnimalInfo extends Fragment implements Serializable, DynamicFabUpda
         }
 
         setHasOptionsMenu(true);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-
         View v = inflater.inflate(R.layout.fragment_animal_info, container, false);
 
         image = (ImageView) v.findViewById(R.id.animal_info_img);
