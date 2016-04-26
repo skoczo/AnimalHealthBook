@@ -41,4 +41,6 @@
     <string name="cost">cost</string>
     <string name="empty_cost">Cost can\'t be empty</string>
     <string name="addComment">Add comment</string>
+    <string name="cant_add_cost">Can\'t add cost</string>
+    <string name="cost_added">Cost added</string>
 </resources>

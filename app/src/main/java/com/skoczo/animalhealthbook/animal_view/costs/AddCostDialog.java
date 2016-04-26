@@ -33,6 +33,7 @@ import java.util.Calendar;
  */
 public class AddCostDialog extends DialogFragment implements OnDatePeak{
 
+    private final CostsFragment costsFragment;
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     private DatePickerFragment datepicker = new DatePickerFragment();
     private Calendar cost_time = Calendar.getInstance();
@@ -41,6 +42,10 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
     private EditText cost;
     private DatabaseHelper dbHelper;
     private EditText comment;
+
+    public AddCostDialog(CostsFragment costsFragment) {
+        this.costsFragment = costsFragment;
+    }
 
 
     @NonNull
@@ -69,7 +74,6 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
             @Override
             public void onClick(View v) {
                 datepicker.show(getFragmentManager(),"");
-
             }
         });
 
@@ -99,8 +103,14 @@ public class AddCostDialog extends DialogFragment implements OnDatePeak{
 
                 long result = costDao.create(costEntity);
                 if(result <= 0) {
-                    Toast.makeText(getContext(), "Can't add cost",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.cant_add_cost,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), R.string.cost_added,Toast.LENGTH_SHORT).show();
                 }
+
+                costsFragment.updateCosts();
+                costsFragment.getListView().deferNotifyDataSetChanged();
+
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

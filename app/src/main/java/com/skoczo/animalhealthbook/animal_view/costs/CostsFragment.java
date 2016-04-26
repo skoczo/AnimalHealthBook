@@ -3,15 +3,13 @@ package com.skoczo.animalhealthbook.animal_view.costs;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -39,6 +37,7 @@ public class CostsFragment extends Fragment {
     private String id;
     private List<Cost> costs = new ArrayList<Cost>();
     private DatabaseHelper dbHelper;
+    private ListView listView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -82,25 +81,20 @@ public class CostsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_animal_costs_item_list, container, false);
+        listView = (ListView)inflater.inflate(R.layout.fragment_animal_costs_items_list, container, false);
 
         updateCosts();
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new CostsRecyclerViewAdapter(costs, mListener));
-        }
-        return view;
+        listView.setAdapter(new CostListViewAdapter(getContext(), R.layout.fragment_animal_costs_item, costs));
+
+        return listView;
     }
 
-    private void updateCosts() {
+    public ListView getListView()
+    {
+        return listView;
+    }
+    public void updateCosts() {
         RuntimeExceptionDao<Cost, Integer> costDao = dbHelper.getCostRuntimeDao();
 
         QueryBuilder<Cost, Integer> query = costDao.queryBuilder();
@@ -123,10 +117,8 @@ public class CostsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.animal_view_add_cost_action) {
-//            Toast.makeText(getContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
-            AddCostDialog cost = new AddCostDialog();
+            AddCostDialog cost = new AddCostDialog(this);
             cost.setId(this.id);
             cost.show(getFragmentManager(), this.getClass().getName());
             return true;

@@ -1,5 +1,5 @@
 #
-# generated on 2016/04/19 09:00:55
+# generated on 2016/04/26 07:43:43
 #
 # --table-start--
 dataClass=com.skoczo.database.CostType
@@ -33,6 +33,9 @@ fieldName=DATE
 # --field-end--
 # --field-start--
 fieldName=TYPE
+# --field-end--
+# --field-start--
+fieldName=COMMENT
 # --field-end--
 # --field-start--
 fieldName=PRICE
